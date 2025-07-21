@@ -8,6 +8,7 @@ import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
+import { ChatWidget } from './components/Chatbot';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <ChatWidget />
       </div>
     </Router>
   );
