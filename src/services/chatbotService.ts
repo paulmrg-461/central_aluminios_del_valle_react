@@ -2,8 +2,8 @@ import axios from 'axios';
 import { ChatbotResponse, Product, ChatSession } from '../types/chat';
 
 // Configuración del servicio de chatbot
-const CHATBOT_API_BASE_URL = process.env.REACT_APP_CHATBOT_API_URL || 'https://api.centralaluminiosdelvalle.com';
-const API_KEY = process.env.REACT_APP_CHATBOT_API_KEY || 'demo-key';
+const CHATBOT_API_BASE_URL = import.meta.env.VITE_REACT_APP_CHATBOT_API_URL || 'https://api.centralaluminiosdelvalle.com';
+const API_KEY = import.meta.env.VITE_REACT_APP_CHATBOT_API_KEY || 'demo-key';
 
 class ChatbotService {
   private sessionId: string;

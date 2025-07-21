@@ -28,8 +28,8 @@ Website profesional para Central de Aluminios del Valle, empresa especializada e
 Crea un archivo `.env` basado en `.env.example`:
 ```bash
 # Configuración del Chatbot
-REACT_APP_CHATBOT_API_URL=https://api.centralaluminiosdelvalle.com
-REACT_APP_CHATBOT_API_KEY=your-api-key-here
+VITE_REACT_APP_CHATBOT_API_URL=https://api.centralaluminiosdelvalle.com
+VITE_REACT_APP_CHATBOT_API_KEY=your-api-key-here
 ```
 ### API Endpoints Esperados
 El chatbot espera los siguientes endpoints en tu backend:
