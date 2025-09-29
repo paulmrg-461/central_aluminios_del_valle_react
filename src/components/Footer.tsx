@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
@@ -10,12 +11,13 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="bg-yellow-400 p-2 rounded-lg">
-                <div className="w-6 h-6 bg-red-600 rounded transform rotate-45"></div>
-              </div>
+              <img 
+                src={logo} 
+                alt="Central de Aluminios del Valle" 
+                className="h-14 w-auto"
+              />
               <div>
-                <h3 className="text-lg font-bold font-poppins">Central de Aluminios</h3>
-                <p className="text-sm text-gray-300">del Valle</p>
+                <p className="text-sm text-gray-300">Central de Aluminios del Valle</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
@@ -75,17 +77,17 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-300 text-sm">
-                  Calle 12 #34-56, Zona Industrial<br />
+                  Cra. 5 # 32-33, Esmeralda<br />
                   Cali, Valle del Cauca, Colombia
                 </p>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-yellow-400 flex-shrink-0" />
-                <p className="text-gray-300 text-sm">+57 (2) 123-4567</p>
+                <p className="text-gray-300 text-sm">+57 301 3318155</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-yellow-400 flex-shrink-0" />
-                <p className="text-gray-300 text-sm">info@centralaluminiosdelvalle.com</p>
+                <p className="text-gray-300 text-sm">centraldealuminioscyg@gmail.com</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="w-5 h-5 text-yellow-400 flex-shrink-0" />

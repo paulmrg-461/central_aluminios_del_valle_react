@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Mail } from 'lucide-react';
+import logoDark from '../assets/logo_dark.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +20,7 @@ const Header = () => {
   const navItems = [
     { path: '/', label: 'Inicio' },
     { path: '/products', label: 'Productos' },
+    { path: '/inventory', label: 'Inventario' },
     { path: '/about', label: 'Nosotros' },
     { path: '/portfolio', label: 'Portafolio' },
     { path: '/blog', label: 'Blog' },
@@ -35,11 +37,11 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4" />
-              <span>+57 (2) 123-4567</span>
+              <span>+57 301 3318155</span>
             </div>
             <div className="flex items-center space-x-2">
               <Mail className="w-4 h-4" />
-              <span>info@centralaluminiosdelvalle.com</span>
+              <span>centraldealuminioscyg@gmail.com</span>
             </div>
           </div>
           <div className="text-sm">
@@ -53,15 +55,11 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="bg-yellow-400 p-2 rounded-lg">
-              <div className="w-8 h-8 bg-red-600 rounded transform rotate-45"></div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900 font-poppins">
-                Central de Aluminios
-              </h1>
-              <p className="text-sm text-gray-600 font-open-sans">del Valle</p>
-            </div>
+            <img 
+              src={logoDark} 
+              alt="Central de Aluminios del Valle" 
+              className="h-14 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

@@ -61,8 +61,8 @@ const ChatWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Usar servicio real o simulado
-      const response = await chatbotService.simulateResponse(inputMessage);
+      // Usar DeepSeek AI para consultas de inventario o respuesta simulada como fallback
+      const response = await chatbotService.queryInventoryWithAI(inputMessage);
       
       // Simular typing delay
       setTimeout(() => {
@@ -147,10 +147,10 @@ const ChatWidget: React.FC = () => {
           }`}>
             <p className="text-sm">{message.content}</p>
             
-            {/* Product Cards */}
-            {message.type === 'product' && message.data && (
+            {/* Inventory Cards */}
+            {(message.type === 'product' || message.type === 'inventory') && message.data && (
               <div className="mt-3 space-y-2">
-                {message.data.slice(0, 2).map((product: any) => (
+                {message.data.slice(0, 3).map((product: any) => (
                   <div key={product.id} className="bg-white p-3 rounded-lg border">
                     <div className="flex items-center space-x-3">
                       <img 
@@ -159,8 +159,8 @@ const ChatWidget: React.FC = () => {
                         className="w-12 h-12 object-cover rounded"
                       />
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 text-xs">{product.name}</h4>
-                        <p className="text-gray-600 text-xs">{product.price}</p>
+                        <h4 className="font-semibold text-gray-900 text-sm">{product.name}</h4>
+                        <p className="text-gray-600 text-sm">{product.price || product.description}</p>
                         <span className={`inline-block px-2 py-1 rounded-full text-xs ${
                           product.inStock 
                             ? 'bg-green-100 text-green-800' 
@@ -182,7 +182,7 @@ const ChatWidget: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => handleSuggestionClick(suggestion)}
-                    className="block w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                    className="block w-full text-left px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                   >
                     {suggestion}
                   </button>
@@ -219,7 +219,7 @@ const ChatWidget: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-50">
+        <div className="fixed bottom-24 right-6 w-96 h-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-50">
           {/* Header */}
           <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-4 rounded-t-lg">
             <div className="flex items-center justify-between">

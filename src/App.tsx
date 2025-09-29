@@ -8,6 +8,7 @@ import About from './pages/About';
 import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import Blog from './pages/Blog';
+import Inventory from './pages/Inventory';
 import { ChatWidget } from './components/Chatbot';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/inventory" element={<Inventory />} />
           </Routes>
         </main>
         <Footer />

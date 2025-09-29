@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { ChatbotResponse, Product, ChatSession } from '../types/chat';
+import { InventoryService } from './inventoryService';
 
 // Configuración del servicio de chatbot
 const CHATBOT_API_BASE_URL = import.meta.env.VITE_REACT_APP_CHATBOT_API_URL || 'https://api.centralaluminiosdelvalle.com';
 const API_KEY = import.meta.env.VITE_REACT_APP_CHATBOT_API_KEY || 'demo-key';
+
+// Configuración de DeepSeek API
+const DEEPSEEK_API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY;
+const DEEPSEEK_API_URL = import.meta.env.VITE_DEEPSEEK_API_URL || 'https://api.deepseek.com/v1/chat/completions';
 
 class ChatbotService {
   private sessionId: string;
@@ -24,6 +29,135 @@ class ChatbotService {
 
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  // Nueva función para consultar inventario usando DeepSeek AI
+  async queryInventoryWithAI(userMessage: string): Promise<ChatbotResponse> {
+    try {
+      console.log('🤖 Consultando inventario con DeepSeek AI...');
+      
+      // Obtener datos del inventario
+      const inventoryData = await InventoryService.getInventoryData();
+      
+      // Preparar el contexto del inventario para la AI
+      const inventoryContext = inventoryData.items.map(item => 
+        `${item.name}: ${item.quantity} unidades disponibles`
+      ).join('\n');
+
+      // Crear el prompt para DeepSeek
+      const systemPrompt = `Eres un asistente virtual especializado en productos de aluminio y vidrio de "Central de Aluminios del Valle". 
+
+INVENTARIO ACTUAL:
+${inventoryContext}
+
+INSTRUCCIONES:
+- Responde de manera amigable y profesional
+- Si preguntan por productos específicos, consulta el inventario y proporciona información exacta
+- Si un producto no está en el inventario, sugiere alternativas similares
+- Incluye información sobre disponibilidad y cantidades cuando sea relevante
+- Mantén un tono comercial pero cercano
+- Si no tienes información específica, ofrece contactar a un asesor
+
+Responde a la siguiente consulta del cliente:`;
+
+      const response = await axios.post(
+        DEEPSEEK_API_URL,
+        {
+          model: 'deepseek-chat',
+          messages: [
+            {
+              role: 'system',
+              content: systemPrompt
+            },
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: 500,
+          temperature: 0.7
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      const aiResponse = response.data.choices[0]?.message?.content || 'Lo siento, no pude procesar tu consulta.';
+
+      // Determinar productos relacionados basados en la respuesta
+      const relatedProducts = this.findRelatedProducts(userMessage, inventoryData.items);
+
+      return {
+        message: aiResponse,
+        type: relatedProducts.length > 0 ? 'product' : 'text',
+        data: relatedProducts,
+        suggestions: [
+          'Ver más productos',
+          'Consultar disponibilidad',
+          'Solicitar cotización',
+          'Hablar con asesor'
+        ]
+      };
+
+    } catch (error) {
+      console.error('Error querying inventory with AI:', error);
+      
+      // Fallback a respuesta simulada si falla DeepSeek
+      return this.simulateInventoryResponse(userMessage);
+    }
+  }
+
+  // Función auxiliar para encontrar productos relacionados
+  private findRelatedProducts(query: string, inventoryItems: any[]): Product[] {
+    const queryLower = query.toLowerCase();
+    const relatedItems = inventoryItems.filter(item => 
+      queryLower.includes(item.name.toLowerCase().split(' ')[0]) ||
+      item.name.toLowerCase().includes(queryLower.split(' ')[0])
+    );
+
+    return relatedItems.slice(0, 3).map((item, index) => ({
+      id: `inv_${index}`,
+      name: item.name,
+      category: 'aluminum',
+      price: 'Consultar precio',
+      description: `Disponible: ${item.quantity} unidades`,
+      image: 'https://images.pexels.com/photos/1078538/pexels-photo-1078538.jpeg?auto=compress&cs=tinysrgb&w=300',
+      inStock: item.quantity > 0
+    }));
+  }
+
+  // Respuesta de fallback para inventario
+  private async simulateInventoryResponse(message: string): Promise<ChatbotResponse> {
+    const inventoryData = await InventoryService.getInventoryData();
+    const lowerMessage = message.toLowerCase();
+
+    // Buscar productos relacionados
+    const relatedItems = inventoryData.items.filter(item => 
+      lowerMessage.includes(item.name.toLowerCase().split(' ')[0]) ||
+      item.name.toLowerCase().includes(lowerMessage.split(' ')[0])
+    );
+
+    if (relatedItems.length > 0) {
+      const itemsList = relatedItems.map(item => 
+        `• ${item.name}: ${item.quantity} unidades disponibles`
+      ).join('\n');
+
+      return {
+        message: `Encontré estos productos en nuestro inventario:\n\n${itemsList}\n\n¿Te interesa alguno en particular?`,
+        type: 'inventory',
+        data: this.findRelatedProducts(message, inventoryData.items),
+        suggestions: ['Solicitar cotización', 'Ver más detalles', 'Consultar instalación']
+      };
+    }
+
+    return {
+      message: 'Puedo ayudarte a consultar nuestro inventario de productos de aluminio y vidrio. ¿Qué producto específico estás buscando?',
+      type: 'text',
+      suggestions: ['CABEZAL 5020', 'SILLAR 5020', 'JAMBA 5020', 'Ver todo el inventario']
+    };
   }
 
   // Enviar mensaje al chatbot
@@ -157,7 +291,7 @@ class ChatbotService {
     return {
       message: 'Disculpa, estoy teniendo problemas técnicos. Un asesor humano te contactará pronto.',
       type: 'error',
-      suggestions: ['Llamar ahora: +57 (2) 123-4567', 'Enviar email', 'Programar llamada']
+      suggestions: ['Llamar ahora: +57 301 3318155', 'Enviar email', 'Programar llamada']
     };
   }
 

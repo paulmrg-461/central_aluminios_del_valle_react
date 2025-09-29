@@ -60,7 +60,7 @@ const Contact = () => {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Dirección</h3>
                   <p className="text-gray-600">
-                    Calle 12 #34-56, Zona Industrial<br />
+                    Cra. 5 # 32-33, Esmeralda<br />
                     Cali, Valle del Cauca, Colombia
                   </p>
                 </div>
@@ -72,7 +72,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Teléfono</h3>
-                  <p className="text-gray-600">+57 (2) 123-4567</p>
+                  <p className="text-gray-600">+57 301 3318155</p>
                   <p className="text-gray-600">+57 (2) 123-4568</p>
                 </div>
               </div>
@@ -83,7 +83,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                  <p className="text-gray-600">info@centralaluminiosdelvalle.com</p>
+                  <p className="text-gray-600">centraldealuminioscyg@gmail.com</p>
                   <p className="text-gray-600">ventas@centralaluminiosdelvalle.com</p>
                 </div>
               </div>
