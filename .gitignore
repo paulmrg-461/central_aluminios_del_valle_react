@@ -22,4 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Service Account Credentials
+centralaluminiosdelvalle-*.json
+*.json
 .env
+centralaluminiosdelvalle-9afd99a5e0f3.json

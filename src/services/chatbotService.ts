@@ -157,7 +157,7 @@ class ChatbotService {
     return {
       message: 'Disculpa, estoy teniendo problemas técnicos. Un asesor humano te contactará pronto.',
       type: 'error',
-      suggestions: ['Llamar ahora: +57 (2) 123-4567', 'Enviar email', 'Programar llamada']
+      suggestions: ['Llamar ahora: +57 301 3318155', 'Enviar email', 'Programar llamada']
     };
   }
 
